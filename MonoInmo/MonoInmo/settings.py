@@ -25,7 +25,7 @@ SECRET_KEY = 'pr%6e7=@dm%(la1+^5(bv=5%8y-5#8*@n)dn=t(rn84nw4#@l&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bot.mono.media']
 
 
 # Application definition
