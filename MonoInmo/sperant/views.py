@@ -89,7 +89,7 @@ def send_sperant(request):
 				gmail.send(msg)
 				return HttpResponse('Success')
 			else:
-				return HttpResponse('Error, %s' % (r.status_code))
+				return HttpResponse('Error, %s, %s' % (r.status_code, r.text))
 		else:
 			print authorization
 			return HttpResponseForbidden('Bad Password')
