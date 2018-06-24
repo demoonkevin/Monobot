@@ -88,6 +88,8 @@ def send_sperant(request):
 					text='Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s \nNombre: %s \nEmail: %s \n' % (proyecto, captacion, nombre, email))
 				gmail.send(msg)
 				return HttpResponse('Success')
+			else:
+				return HttpResponse('Error, %s' % (r.status_code))
 		else:
 			print authorization
 			return HttpResponseForbidden('Bad Password')
