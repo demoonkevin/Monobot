@@ -18,7 +18,7 @@ def send_sperant(request):
 	if request.method == 'POST':
 		authorization = request.META.get('HTTP_AUTHORIZATION')
 		if authorization == 'maVyMnGP8gXVZPhp83eQu6P4DyxxXp':
-			pwd = 'oktysfkhtncwinzs'
+			pwd = 'zihnijxjylgjdvlj'
 			data = json.loads(request.body)
 			email = data['email']
 			fname = data['fname']
