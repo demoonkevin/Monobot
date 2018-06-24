@@ -23,6 +23,7 @@ def send_sperant(request):
 			email = data['email']
 			fname = data['fname']
 			lname = data['lname']
+			main_telephone = data['main_telephone']
 			seller_id = data['seller_id']
 			source_id = data['source_id']
 			document = data['document']
@@ -41,6 +42,7 @@ def send_sperant(request):
 							'email': email,
 							'fname': fname,
 							'lname': lname,
+							'main_telephone': main_telephone,
 							'source_id': source_id,
 							'project_related': project_related,
 							'seller_id': seller_id
@@ -52,6 +54,7 @@ def send_sperant(request):
 							'email': email,
 							'fname': fname,
 							'lname': lname,
+							'main_telephone': main_telephone,
 							'document': document,
 							'source_id': source_id,
 							'project_related': project_related,
@@ -64,6 +67,7 @@ def send_sperant(request):
 						'email': email,
 						'fname': fname,
 						'lname': lname,
+						'main_telephone': main_telephone,
 						'document': document,
 						'source_id': source_id,
 						'project_related': project_related,
@@ -84,6 +88,7 @@ def send_sperant(request):
 				gmail.send(msg)
 				return HttpResponse('Success')
 		else:
+			print authorization
 			return HttpResponseForbidden('Bad Password')
 
 
