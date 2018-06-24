@@ -14,6 +14,7 @@ from gmail import GMail, Message
 
 # Create your views here.
 
+@csrf_exempt
 def send_sperant(request):
 	if request.method == 'POST':
 		authorization = request.META.get('HTTP_AUTHORIZATION')
