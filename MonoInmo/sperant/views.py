@@ -78,6 +78,7 @@ def send_sperant(request):
 					}
 				}
 			r = requests.post(url, headers=headers, json=info, verify=False)
+			print r.text
 			if r.status_code == 201:
 				data = r.json()
 				proyecto = data['client']['projects_related'][0]['name']
