@@ -24,10 +24,12 @@ def send_sperant(request):
 			email = data['email']
 			fname = data['fname']
 			lname = data['lname']
-			main_telephone = data['main_telephone']
+			main_telephone = str(data['main_telephone'])
+			if main_telephone != '':
+				main_telephone = main_telephone[3:len(main_telephone)]
 			seller_id = data['seller_id']
 			source_id = data['source_id']
-			document = data['document']
+			document = str(data['document'])
 			project_related = data['project_related']
 			token = data['token']
 			url = 'https://api.sperant.com/v2/clients'
