@@ -80,6 +80,7 @@ def send_sperant(request):
 			r = requests.post(url, headers=headers, json=info, verify=False)
 			print r.text
 			if r.status_code == 201:
+				print 'GENIAL FUNCIONANDO'
 				data = r.json()
 				print data
 				proyecto = data['client']['projects_related'][0]['name']
@@ -92,7 +93,7 @@ def send_sperant(request):
 					cc = 'Sandra Calderon <sandra.calderon@wescon.pe>',
 					text='Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s \nNombre: %s \nEmail: %s \n' % (proyecto, captacion, nombre, email))
 				envio = gmail.send(msg)
-				print envio
+				print 'este es el envio', envio
 				return HttpResponse('Success')
 			else:
 				return HttpResponse('Error, %s, %s' % (r.status_code, r.text))
