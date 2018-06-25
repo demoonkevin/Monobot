@@ -81,10 +81,12 @@ def send_sperant(request):
 			print r.text
 			if r.status_code == 201:
 				data = r.json()
+				print data
 				proyecto = data['client']['projects_related'][0]['name']
 				nombre = '%s %s' % (fname, lname)
 				captacion = data['client']['captation_way']
 				gmail = GMail('Wescon <medios.wescon@gmail.com>', pwd)
+				print gmail
 				msg = Message('Nuevo Prospecto %s' % (proyecto),
 					to='Carlos Huby <carlos.huby@wescon.pe>',
 					cc = 'Sandra Calderon <sandra.calderon@wescon.pe>',
