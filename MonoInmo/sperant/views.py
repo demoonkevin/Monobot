@@ -89,7 +89,7 @@ def send_sperant(request):
 				gmail = GMail('Wescon <medios.wescon@gmail.com>', pwd)
 				print gmail
 				print gmail.is_connected
-				msg = Message('Nuevo Prospecto %s' % (proyecto),to='Carlos Huby <carlos.huby@wescon.pe>',text='Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s \nNombre: %s \nEmail: %s \n' % (proyecto, captacion, nombre, email))
+				msg = Message('Nuevo Prospecto %s' % (proyecto), to='Carlos Huby <carlos.huby@wescon.pe>', text='Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s Nombre: %s Email: %s' % (proyecto, captacion, nombre, email))
 				envio = gmail.send(msg)
 				print 'este es el envio', envio
 				return HttpResponse('Success')
