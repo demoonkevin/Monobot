@@ -91,7 +91,8 @@ def send_sperant(request):
 					to='Carlos Huby <carlos.huby@wescon.pe>',
 					cc = 'Sandra Calderon <sandra.calderon@wescon.pe>',
 					text='Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s \nNombre: %s \nEmail: %s \n' % (proyecto, captacion, nombre, email))
-				gmail.send(msg)
+				envio = gmail.send(msg)
+				print envio
 				return HttpResponse('Success')
 			else:
 				return HttpResponse('Error, %s, %s' % (r.status_code, r.text))
