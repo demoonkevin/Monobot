@@ -9,7 +9,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
-
+import random
 from gmail import GMail, Message
 
 # Create your views here.
@@ -27,7 +27,8 @@ def send_sperant(request):
 			main_telephone = str(data['main_telephone'])
 			if main_telephone != '':
 				main_telephone = main_telephone[3:len(main_telephone)]
-			seller_id = data['seller_id']
+			seller_id = str(data['seller_id'])
+			seller_id = int(random.choice(seller_id.split()))
 			source_id = data['source_id']
 			document = str(data['document'])
 			project_related = data['project_related']
