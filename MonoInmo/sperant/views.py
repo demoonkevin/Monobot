@@ -10,7 +10,6 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
 import random
-from gmail import GMail, Message
 
 # Create your views here.
 
@@ -87,13 +86,17 @@ def send_sperant(request):
 				proyecto = data['client']['projects_related'][0]['name']
 				nombre = '%s %s' % (fname, lname)
 				captacion = data['client']['captation_way']
-				gmail = GMail('Wescon <medios.wescon@gmail.com>', pwd)
-				print gmail
-				print gmail.is_connected
-				msg = Message('Nuevo Prospecto %s' % (proyecto), to='Carlos Huby <carlos.huby@wescon.pe>', text='Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s Nombre: %s Email: %s' % (proyecto, captacion, nombre, email))
-				print msg
-				gmail.send(msg)
-				print 'tendria que haber enviado'
+				#parte de mailgun
+				auth = ('api', 'key-68d719923cdad783196b7c68aedb927a')
+				url = 'https://api.mailgun.net/v3/go.monomedia.pe/messages'
+				data = {
+					'from': 'Mono Media <postmaster@go.monomedia.pe>',
+					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe'],
+					'subject': 'Nuevo prospecto para %s' % (proyecto),
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s' % (proyecto, captacion, nombre, email)				
+				}
+				r = requests.post(url, auth=auth, data=data)
+				#fin mailgun
 				return HttpResponse('Success')
 			else:
 				return HttpResponse('Error, %s, %s' % (r.status_code, r.text))
