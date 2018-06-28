@@ -10,7 +10,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 import requests
 import random
-
+from bs4 import BeautifulSoup
+import re
 # Create your views here.
 
 @csrf_exempt
@@ -18,7 +19,6 @@ def send_sperant(request):
 	if request.method == 'POST':
 		authorization = request.META.get('HTTP_AUTHORIZATION')
 		if authorization == 'maVyMnGP8gXVZPhp83eQu6P4DyxxXp':
-			pwd = 'zihnijxjylgjdvlj'
 			data = json.loads(request.body)
 			email = data['email']
 			fname = data['fname']
@@ -104,5 +104,52 @@ def send_sperant(request):
 			print authorization
 			return HttpResponseForbidden('Bad Password')
 
-
-
+@csrf_exempt
+def urbania_sperant(request):
+	if request.method == 'POST':
+		authorization = request.META.get('HTTP_AUTHORIZATION')
+		if authorization == 'maVyMnGP8gXVZPhp83eQu6P4DyxxXp':
+			data = json.loads(request.body)
+			project_related = data['project_related']
+			token = data['token']
+			seller_id = str(data['seller_id'])
+			seller_id = int(random.choice(seller_id.split()))
+			source_id = data['source_id']
+			html = data['html']
+			soup = BeautifulSoup(html, 'html.parser')
+			pre_name = soup.find('span', text=re.compile('Contacto')).parent.text
+			name = pre_name[10:len(pre_name)]
+			name_split = name.split()
+			pre_email = soup.find('span', text=re.compile('Email')).parent.text
+			email = pre_email[7:len(pre_email)]
+			main_telephone = str(soup.find('span', text=re.compile('fono')).parent.find('a').get_text())
+			if len(name_split) == 1:
+				lname = 'Apellido Desconocido'
+			elif len(name_split) == 2:
+				fname = name_split[0]
+				lname = name_split[1]
+			elif len(name_split) == 3:
+				fname = name_split[0]
+				lname = '%s %s' % (name_split[1], name_split[2])
+			elif len(name_split) > 3:
+				fname = '%s %s' % (name_split[0], name_split[1])
+				lname = name[len(fname):len(name)]
+			url = 'https://api.sperant.com/v2/clients'
+			headers = {
+				'Authorization': 'Bearer %s' % (token),
+				'Cache-Control': 'no-cache',
+				'Content-Type': 'application/json'
+			}
+			info = {
+				'data': {
+					'email': email,
+					'fname': fname,
+					'lname': lname,
+					'main_telephone': main_telephone,
+					'source_id': source_id,
+					'project_related': project_related,
+					'seller_id': seller_id
+				}
+			}
+		else:
+			return HttpResponseForbidden('Bad Password')
