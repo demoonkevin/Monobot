@@ -153,6 +153,23 @@ def urbania_sperant(request):
 			}
 			r = requests.post(url, headers=headers, json=info, verify=False)
 			if r.status_code == 201:
+				print 'GENIAL FUNCIONANDO'
+				data = r.json()
+				print data
+				proyecto = data['client']['projects_related'][0]['name']
+				nombre = '%s %s' % (fname, lname)
+				captacion = data['client']['captation_way']
+				#parte de mailgun
+				auth = ('api', 'key-68d719923cdad783196b7c68aedb927a')
+				url = 'https://api.mailgun.net/v3/go.monomedia.pe/messages'
+				data = {
+					'from': 'Mono Media <postmaster@go.monomedia.pe>',
+					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe'],
+					'subject': 'Nuevo prospecto para %s' % (proyecto),
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s' % (proyecto, captacion, nombre, email)				
+				}
+				r = requests.post(url, auth=auth, data=data)
+				#fin mailgun
 				return HttpResponse('Success')
 			else:
 				return HttpResponse('Error, %s, %s' % (r.status_code, r.text))
