@@ -151,5 +151,10 @@ def urbania_sperant(request):
 					'seller_id': seller_id
 				}
 			}
+			r = requests.post(url, headers=headers, json=info, verify=False)
+			if r.status_code == 201:
+				return HttpResponse('Success')
+			else:
+				return HttpResponse('Error, %s, %s' % (r.status_code, r.text))
 		else:
 			return HttpResponseForbidden('Bad Password')
