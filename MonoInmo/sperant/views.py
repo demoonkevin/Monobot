@@ -124,6 +124,7 @@ def urbania_sperant(request):
 			email = pre_email[7:len(pre_email)]
 			main_telephone = str(soup.find('span', text=re.compile('fono')).parent.find('a').get_text())
 			if len(name_split) == 1:
+				fname = name
 				lname = 'Apellido Desconocido'
 			elif len(name_split) == 2:
 				fname = name_split[0]
