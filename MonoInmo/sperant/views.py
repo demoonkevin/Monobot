@@ -26,8 +26,10 @@ def send_sperant(request):
 			main_telephone = str(data['main_telephone'])
 			if main_telephone != '':
 				main_telephone = main_telephone[3:len(main_telephone)]
-			seller_id = str(data['seller_id'])
-			seller_id = int(random.choice(seller_id.split()))
+			sellers = str(data['seller_id'])
+			seller = int(random.choice(sellers.split()))
+			seller_id = seller.split('|')[0]
+			seller_email = seller.split('|')[1]
 			source_id = data['source_id']
 			document = str(data['document'])
 			project_related = data['project_related']
@@ -91,9 +93,9 @@ def send_sperant(request):
 				url = 'https://api.mailgun.net/v3/go.monomedia.pe/messages'
 				data = {
 					'from': 'Mono Media <postmaster@go.monomedia.pe>',
-					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe'],
+					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe', '%s' % seller_email],
 					'subject': 'Nuevo prospecto para %s' % (proyecto),
-					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s' % (proyecto, captacion, nombre, email)				
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\n Puedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
 				}
 				r = requests.post(url, auth=auth, data=data)
 				#fin mailgun
@@ -167,7 +169,7 @@ def urbania_sperant(request):
 					'from': 'Mono Media <postmaster@go.monomedia.pe>',
 					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe'],
 					'subject': 'Nuevo prospecto para %s' % (proyecto),
-					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s' % (proyecto, captacion, nombre, email)				
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\n Puedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
 				}
 				r = requests.post(url, auth=auth, data=data)
 				#fin mailgun
