@@ -27,8 +27,8 @@ def send_sperant(request):
 			if main_telephone != '':
 				main_telephone = main_telephone[3:len(main_telephone)]
 			sellers = str(data['seller_id'])
-			seller = int(random.choice(sellers.split()))
-			seller_id = seller.split('|')[0]
+			seller = random.choice(sellers.split())
+			seller_id = int(seller.split('|')[0])
 			seller_email = seller.split('|')[1]
 			source_id = data['source_id']
 			document = str(data['document'])
