@@ -108,7 +108,65 @@ def send_sperant(request):
 
 @csrf_exempt
 def nexo_sperant(request):
-	pass			
+	if request.method == 'POST':
+		authorization = request.META.get('HTTP_AUTHORIZATION')
+		if authorization == 'maVyMnGP8gXVZPhp83eQu6P4DyxxXp':
+			data = json.loads(request.body)
+			project_related = data['project_related']
+			token = data['token']
+			sellers = str(data['seller_id'])
+			seller = random.choice(sellers.split())
+			seller_id = int(seller.split('|')[0])
+			seller_email = seller.split('|')[1]
+			source_id = data['source_id']
+			html = data['html']
+			soup = BeautifulSoup(html, 'html.parser')
+			fname = soup.find('span', text='Nombre: ').parent.findChildren()[1].text
+			lname = soup.find('span', text='Apellido: ').parent.findChildren()[1].text
+			email = soup.find('span', text='Correo: ').parent.findChildren()[1].text
+			main_telephone = soup.find('span', text=re.compile('fono')).parent.findChildren()[1].text
+			url = 'https://api.sperant.com/v2/clients'
+			headers = {
+				'Authorization': 'Bearer %s' % (token),
+				'Cache-Control': 'no-cache',
+				'Content-Type': 'application/json'
+			}
+			info = {
+				'data': {
+					'email': email,
+					'fname': fname,
+					'lname': lname,
+					'main_telephone': main_telephone,
+					'source_id': source_id,
+					'project_related': project_related,
+					'seller_id': seller_id
+				}
+			}
+			r = requests.post(url, headers=headers, json=info, verify=False)
+			if r.status_code == 201:
+				print 'GENIAL FUNCIONANDO'
+				data = r.json()
+				print data
+				proyecto = data['client']['projects_related'][0]['name']
+				nombre = '%s %s' % (fname, lname)
+				captacion = data['client']['captation_way']
+				#parte de mailgun
+				auth = ('api', 'key-68d719923cdad783196b7c68aedb927a')
+				url = 'https://api.mailgun.net/v3/go.monomedia.pe/messages'
+				data = {
+					'from': 'Mono Media <postmaster@go.monomedia.pe>',
+					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe', '%s' % seller_email],
+					'subject': 'Nuevo prospecto para %s' % (proyecto),
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\n Puedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
+				}
+				r = requests.post(url, auth=auth, data=data)
+				#fin mailgun
+				return HttpResponse('Success')
+			else:
+				return HttpResponse('Error, %s, %s' % (r.status_code, r.text))
+		else:
+			return HttpResponseForbidden('Bad Password')
+
 
 @csrf_exempt
 def urbania_sperant(request):
