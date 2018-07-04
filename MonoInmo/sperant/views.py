@@ -107,6 +107,10 @@ def send_sperant(request):
 			return HttpResponseForbidden('Bad Password')
 
 @csrf_exempt
+def nexo_sperant(request):
+	pass			
+
+@csrf_exempt
 def urbania_sperant(request):
 	if request.method == 'POST':
 		authorization = request.META.get('HTTP_AUTHORIZATION')
