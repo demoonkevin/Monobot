@@ -124,6 +124,7 @@ def nexo_sperant(request):
 			fname = soup.find('span', text='Nombre: ').parent.findChildren()[1].text
 			lname = soup.find('span', text='Apellido: ').parent.findChildren()[1].text
 			email = soup.find('span', text='Correo: ').parent.findChildren()[1].text
+			document = str(soup.find('span', text='DNI: ').parent.findChildren()[1].text)
 			main_telephone = soup.find('span', text=re.compile('fono')).parent.findChildren()[1].text
 			url = 'https://api.sperant.com/v2/clients'
 			headers = {
@@ -137,6 +138,7 @@ def nexo_sperant(request):
 					'fname': fname,
 					'lname': lname,
 					'main_telephone': main_telephone,
+					'document': document,
 					'source_id': source_id,
 					'project_related': project_related,
 					'seller_id': seller_id
