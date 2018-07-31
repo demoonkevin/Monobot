@@ -25,10 +25,10 @@ def web_sperant(request):
 			email = data['email']
 			fname = data['fname']
 			lname = data['lname']
-			main_telephone = '999000222'
 			source_id = data['source_id']
-			document = str(data['document'])
-			message = data['message']
+			main_telephone = date.get('main_telephone')
+			document = data.get('document')
+			message = data.get('message')
 			project_related = data['project_related']
 			sellers = str(data['seller_id'])
 			seller = random.choice(sellers.split())
@@ -74,7 +74,6 @@ def web_sperant(request):
 						'fname': fname,
 						'lname': lname,
 						'main_telephone': main_telephone,
-						'document': document,
 						'source_id': source_id,
 						'project_related': project_related,
 						'seller_id': seller_id
