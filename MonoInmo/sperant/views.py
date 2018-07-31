@@ -26,7 +26,7 @@ def web_sperant(request):
 			fname = data['fname']
 			lname = data['lname']
 			source_id = data['source_id']
-			main_telephone = date.get('main_telephone')
+			main_telephone = data.get('main_telephone')
 			document = data.get('document')
 			message = data.get('message')
 			project_related = data['project_related']
