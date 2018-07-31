@@ -23,7 +23,7 @@ def web_sperant(request):
 			email = data['email']
 			fname = data['fname']
 			lname = data['lname']
-			main_telephone = str(data['main_telephone'])
+			main_telephone = data['main_telephone']
 			source_id = data['source_id']
 			document = str(data['document'])
 			message = data['message']
