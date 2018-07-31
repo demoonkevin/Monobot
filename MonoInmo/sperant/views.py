@@ -20,6 +20,7 @@ def web_sperant(request):
 		authorization = request.META.get('HTTP_AUTHORIZATION')
 		if authorization == 'maVyMnGP8gXVZPhp83eQu6P4DyxxXp':
 			data = json.loads(request.body)
+			print data
 			email = data['email']
 			fname = data['fname']
 			lname = data['lname']
