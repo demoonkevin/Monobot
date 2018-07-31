@@ -41,6 +41,7 @@ def web_sperant(request):
 				'Cache-Control': 'no-cache',
 				'Content-Type': 'application/json'
 			}
+			'''
 			if document:
 				if document == '':
 					info = {
@@ -79,6 +80,19 @@ def web_sperant(request):
 						'seller_id': seller_id
 					}
 				}
+			'''
+			info = {
+				'data': {
+					'email': email,
+					'fname': fname,
+					'lname': lname,
+					'main_telephone': main_telephone,
+					'document': document,
+					'source_id': source_id,
+					'project_related': project_related,
+					'seller_id': seller_id
+				}
+			}
 			r = requests.post(url, headers=headers, json=info, verify=False)
 			if r.status_code == 201:
 				print 'GENIAL FUNCIONANDO'
