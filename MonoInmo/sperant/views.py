@@ -20,8 +20,6 @@ def web_sperant(request):
 		authorization = request.META.get('HTTP_AUTHORIZATION')
 		if authorization == 'maVyMnGP8gXVZPhp83eQu6P4DyxxXp':
 			data = json.loads(request.body)
-			print 'DEBERIA IMPRIMIR DATA AQUI'
-			print data
 			email = data['email']
 			fname = data['fname']
 			lname = data['lname']
@@ -41,46 +39,6 @@ def web_sperant(request):
 				'Cache-Control': 'no-cache',
 				'Content-Type': 'application/json'
 			}
-			'''
-			if document:
-				if document == '':
-					info = {
-						'data': {
-							'email': email,
-							'fname': fname,
-							'lname': lname,
-							'main_telephone': main_telephone,
-							'source_id': source_id,
-							'project_related': project_related,
-							'seller_id': seller_id
-						}
-					}
-				else:
-					info = {
-						'data': {
-							'email': email,
-							'fname': fname,
-							'lname': lname,
-							'main_telephone': main_telephone,
-							'document': document,
-							'source_id': source_id,
-							'project_related': project_related,
-							'seller_id': seller_id
-						}
-					}
-			else:
-				info = {
-					'data': {
-						'email': email,
-						'fname': fname,
-						'lname': lname,
-						'main_telephone': main_telephone,
-						'source_id': source_id,
-						'project_related': project_related,
-						'seller_id': seller_id
-					}
-				}
-			'''
 			info = {
 				'data': {
 					'email': email,
@@ -106,10 +64,9 @@ def web_sperant(request):
 				url = 'https://api.mailgun.net/v3/go.monomedia.pe/messages'
 				data = {
 					'from': 'Mono Media <postmaster@go.monomedia.pe>',
-					'to': ['demoonkevin@gmail.com'],
-					#'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe', '%s' % seller_email],
+					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe', '%s' % seller_email],
 					'subject': 'Nuevo prospecto para %s' % (proyecto),
-					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\nMensaje:%s\n Puedes verlo en Sperant.' % (proyecto, captacion, nombre, email, message)				
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\nMensaje:%s\nPuedes verlo en Sperant.' % (proyecto, captacion, nombre, email, message)				
 				}
 				r = requests.post(url, auth=auth, data=data)
 				#fin mailgun
@@ -120,7 +77,7 @@ def web_sperant(request):
 			return HttpResponseForbidden('Bad Password')
 
 @csrf_exempt
-def send_sperant(request):
+def fb_sperant(request):
 	if request.method == 'POST':
 		authorization = request.META.get('HTTP_AUTHORIZATION')
 		if authorization == 'maVyMnGP8gXVZPhp83eQu6P4DyxxXp':
@@ -128,15 +85,15 @@ def send_sperant(request):
 			email = data['email']
 			fname = data['fname']
 			lname = data['lname']
-			main_telephone = str(data['main_telephone'])
-			if main_telephone != '':
+			main_telephone = data.get('main_telephone')
+			if main_telephone != '' and main_telephone != None:
 				main_telephone = main_telephone[3:len(main_telephone)]
+			document = data.get('document')
 			sellers = str(data['seller_id'])
 			seller = random.choice(sellers.split())
 			seller_id = int(seller.split('|')[0])
 			seller_email = seller.split('|')[1]
 			source_id = data['source_id']
-			document = str(data['document'])
 			project_related = data['project_related']
 			token = data['token']
 			url = 'https://api.sperant.com/v2/clients'
@@ -145,45 +102,18 @@ def send_sperant(request):
 				'Cache-Control': 'no-cache',
 				'Content-Type': 'application/json'
 			}
-			if document:
-				if document == '':
-					info = {
-						'data': {
-							'email': email,
-							'fname': fname,
-							'lname': lname,
-							'main_telephone': main_telephone,
-							'source_id': source_id,
-							'project_related': project_related,
-							'seller_id': seller_id
-						}
-					}
-				else:
-					info = {
-						'data': {
-							'email': email,
-							'fname': fname,
-							'lname': lname,
-							'main_telephone': main_telephone,
-							'document': document,
-							'source_id': source_id,
-							'project_related': project_related,
-							'seller_id': seller_id
-						}
-					}
-			else:
-				info = {
-					'data': {
-						'email': email,
-						'fname': fname,
-						'lname': lname,
-						'main_telephone': main_telephone,
-						'document': document,
-						'source_id': source_id,
-						'project_related': project_related,
-						'seller_id': seller_id
-					}
+			info = {
+				'data': {
+					'email': email,
+					'fname': fname,
+					'lname': lname,
+					'main_telephone': main_telephone,
+					'document': document,
+					'source_id': source_id,
+					'project_related': project_related,
+					'seller_id': seller_id
 				}
+			}
 			r = requests.post(url, headers=headers, json=info, verify=False)
 			print r.text
 			if r.status_code == 201:
@@ -200,7 +130,7 @@ def send_sperant(request):
 					'from': 'Mono Media <postmaster@go.monomedia.pe>',
 					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe', '%s' % seller_email],
 					'subject': 'Nuevo prospecto para %s' % (proyecto),
-					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\n Puedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\nPuedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
 				}
 				r = requests.post(url, auth=auth, data=data)
 				#fin mailgun
@@ -264,7 +194,7 @@ def nexo_sperant(request):
 					'from': 'Mono Media <postmaster@go.monomedia.pe>',
 					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe', '%s' % seller_email],
 					'subject': 'Nuevo prospecto para %s' % (proyecto),
-					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\n Puedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\nPuedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
 				}
 				r = requests.post(url, auth=auth, data=data)
 				#fin mailgun
@@ -340,7 +270,7 @@ def urbania_sperant(request):
 					'from': 'Mono Media <postmaster@go.monomedia.pe>',
 					'to': ['carlos.huby@wescon.pe', 'sandra.calderon@wescon.pe', '%s' % seller_email],
 					'subject': 'Nuevo prospecto para %s' % (proyecto),
-					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\n Puedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
+					'text': 'Se ha creado un nuevo prospecto para el proyecto %s, proveniente de %s\nNombre: %s\nEmail: %s\nPuedes verlo en Sperant.' % (proyecto, captacion, nombre, email)				
 				}
 				r = requests.post(url, auth=auth, data=data)
 				#fin mailgun
